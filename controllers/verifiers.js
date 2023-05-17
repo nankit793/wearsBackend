@@ -12,7 +12,7 @@ const passwordVerification = (password) => {
 };
 
 const otpVerification = (otp) => {
-  if (otp.length === 6) {
+  if (otp.length === 4) {
     return true;
   }
   return false;

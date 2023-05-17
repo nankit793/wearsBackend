@@ -6,13 +6,13 @@ const {
   serverError,
   userNotExist,
 } = require("@errors/general");
-const { attachCokiesToRes } = require("@controllers/general");
+const { attachCokiesToRes, generateOTP } = require("@controllers/general");
 const USERS = require("@models/user/UserSchema");
 const {
   emailVerification,
   passwordVerification,
 } = require("@controllers/verifiers");
-const { compareHash } = require("@controllers/bcrypt");
+const { compareHash, generateHash } = require("@controllers/bcrypt");
 
 app.post("/", async (req, res) => {
   try {
@@ -25,7 +25,7 @@ app.post("/", async (req, res) => {
     if (emailVerification(username) && passwordVerification(password)) {
       let user = await USERS.findOne({ username });
       if (!user) {
-        return res.status(403).json({ message: userNotExist(res) });
+        return res.json({ message: userNotExist(res) });
       }
       if (user && user.accountVerfication) {
         const passwordCompare = await compareHash(
@@ -38,19 +38,28 @@ app.post("/", async (req, res) => {
             .json({ message: "Invalid Username or Password" });
         }
         const payload = {
-          id: user.id,
           username: user.username,
         };
         await attachCokiesToRes(res, payload);
-        return res.status(200).json({ message: "successfull login" });
+        return res.status(200).json({ message: "successfully login" });
       } else {
-        return res
-          .status(403)
-          .json({ message: "your account is not verified" });
+        const OTP = generateOTP();
+        const otpHash = await generateHash(OTP);
+        if (otpHash && otpHash.hashed) {
+          user.verifyOTP = otpHash.hashed;
+          //send mail to user
+          await user.save();
+        } else {
+          throw Error("");
+        }
+        return res.status(401).json({
+          otp: OTP,
+          message: "Your account is not verified, Check your mail",
+        });
       }
     }
     return res.json({
-      message: itemsNotValid("username, password, name", res),
+      message: itemsNotValid("username, password", res),
     });
   } catch (error) {
     console.log(error.message);
