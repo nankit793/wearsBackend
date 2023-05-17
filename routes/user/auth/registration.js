@@ -15,16 +15,32 @@ const { generateHash } = require("@controllers/bcrypt");
 const { generateOTP } = require("@controllers/general");
 
 app.post("/", async (req, res) => {
-  const { username, password, name } = req.body;
-  if (!username || !password || !name) {
+  const { username, password } = req.body;
+  if (!username || !password) {
     return res.json({
-      message: itemsRequired("username, password, name", res),
+      message: itemsRequired("username, password", res),
     });
   }
-  if (emailVerification(username) && passwordVerification(password) && name) {
+  if (emailVerification(username) && passwordVerification(password)) {
     let user = await USERS.findOne({ username });
     if (user) {
-      return res.status(403).json({ message: userAlreadyExists(res) });
+      if (user && !user.accountVerfication) {
+        const OTP = generateOTP();
+        const otpHash = await generateHash(OTP);
+        if (otpHash && otpHash.hashed) {
+          user.verifyOTP = otpHash.hashed;
+          //send mail to user
+          await user.save();
+          return res.status(200).json({
+            message: "Already Exist, Confirm the OTP for complete registration",
+            otp: OTP,
+          });
+        }
+        return res.status(200).json({
+          message: "Please confirm the OTP for complete registration",
+        });
+      }
+      return res.json({ message: userAlreadyExists(res) });
     }
     user = await USERS(req.body);
     const hashedPassword = await generateHash(req.body.password);
@@ -40,9 +56,9 @@ app.post("/", async (req, res) => {
         otp: OTP,
       });
     }
-    return res.status(401).json({ message: serverError("", res) });
+    return res.json({ message: serverError("", res) });
   }
-  return res.json({ message: itemsNotValid("username, password, name", res) });
+  return res.json({ message: itemsNotValid("username, password", res) });
 });
 
 module.exports = app;
