@@ -6,7 +6,7 @@ const {
 const generateOTP = () => {
   var digits = "0123456789";
   let OTP = "";
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 4; i++) {
     OTP += digits[Math.floor(Math.random() * 10)];
   }
   return OTP;
@@ -20,14 +20,14 @@ const attachCokiesToRes = (res, payload) => {
   const longerExp = 1000 * 60 * 60 * 24 * 30;
 
   res.cookie("accessToken", accessTokenJWT, {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NODE_ENV === "production",
     signed: true,
     expires: new Date(Date.now() + oneDay),
   });
 
   res.cookie("refreshToken", refreshTokenJWT, {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NODE_ENV === "production",
     signed: true,
     expires: new Date(Date.now() + longerExp),
