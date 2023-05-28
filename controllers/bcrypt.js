@@ -13,6 +13,7 @@ const generateHash = async (payload) => {
 };
 const compareHash = async (clientPassword, serverPassword) => {
   try {
+    console.log(clientPassword, serverPassword);
     const comapreHashed = await bcryptjs.compare(
       clientPassword,
       serverPassword

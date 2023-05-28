@@ -18,4 +18,16 @@ const otpVerification = (otp) => {
   return false;
 };
 
-module.exports = { emailVerification, passwordVerification, otpVerification };
+const phoneNumberVerify = (phone) => {
+  if (phone.length === 10) {
+    return true;
+  }
+  return false;
+};
+
+module.exports = {
+  emailVerification,
+  passwordVerification,
+  otpVerification,
+  phoneNumberVerify,
+};

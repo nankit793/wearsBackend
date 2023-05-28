@@ -1,5 +1,5 @@
 const express = require("express");
 const app = express();
 
-app.use("/v1", require("./stylewood/index"));
+app.use("/p", require("./public"));
 module.exports = app;

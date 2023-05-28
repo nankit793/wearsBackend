@@ -19,12 +19,9 @@ const verifyRefreshTokens = async (refreshToken) => {
       refreshToken,
       process.env.JWT_REFRESH_TOKEN_SECRET
     );
-    return { verified: true, verifyToken, generateNew: false };
+    return { verified: true, verifyToken };
   } catch (error) {
-    if (error.message === "jwt expired") {
-      return { verified: false, generateNew: true };
-    }
-    return { verified: false, generateNew: false };
+    return { verified: false };
   }
 };
 

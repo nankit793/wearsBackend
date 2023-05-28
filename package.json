@@ -11,7 +11,9 @@
     "@root": ".",
     "@errors": "./errors",
     "@controllers": "./controllers",
-    "@models": "./models"
+    "@models": "./models",
+    "@middlewares": "./middlewares",
+    "@v1": "./routes/stylewood"
   },
   "_moduleDirectories": [
     "node_modules_custom"
@@ -19,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

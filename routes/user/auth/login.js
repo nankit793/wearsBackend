@@ -23,7 +23,7 @@ app.post("/", async (req, res) => {
       });
     }
     if (emailVerification(username) && passwordVerification(password)) {
-      let user = await USERS.findOne({ username });
+      let user = await USERS.findOne({ username }).select("+password");
       if (!user) {
         return res.json({ message: userNotExist(res) });
       }
@@ -62,7 +62,6 @@ app.post("/", async (req, res) => {
       message: itemsNotValid("username, password", res),
     });
   } catch (error) {
-    console.log(error.message);
     return res.json({
       message: serverError("", res),
     });

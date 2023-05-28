@@ -8,9 +8,12 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const jwt = require("jsonwebtoken");
 const { generateRefreshToken } = require("@controllers/generateTokens");
+const { attachCokiesToRes } = require("@controllers/general");
 const port = process.env.PORT || 5000;
 const app = express();
 const USERS = require("@models/user/UserSchema");
+
+app.use(cookieParser("h3iueiohalkfdqhjdhoi1308yehdif"));
 
 require("dotenv").config({
   path: "./dev.env",
@@ -43,7 +46,7 @@ passport.use(
         await user.save();
       }
       // Generate JWT token
-      const token = generateRefreshToken({ payload });
+      const token = payload;
       done(null, token);
     }
   )
@@ -58,18 +61,19 @@ app.get(
   passport.authenticate("google", { session: false }),
   async (req, res) => {
     const token = await req.user;
+    console.log(token);
+    await attachCokiesToRes(res, token);
     // Redirect the user to the frontend with the JWT token as a query parameter
-    console.log(token, "request mode");
-    res.redirect(`http://localhost:3000/login?token=${token}`);
+    res.redirect(`http://localhost:3000`);
   }
 );
 
-app.use(cookieParser(process.env.COOKIE_VERIFY_SECRET));
 app.use(bodyParser.json());
 app.use("*", cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.json());
 
 app.use("/user", require("./routes/user/index"));
+app.use("/", require("./routes/index"));
 
 // routes to handle
 app.use("*", (req, res) => {
