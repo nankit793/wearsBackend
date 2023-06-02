@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Pages = new mongoose.Schema({
   title: { type: String, required: true },
-  image: { type: String, required: true },
+  imageURL: { type: String, required: true },
   products: {
     type: [
       {

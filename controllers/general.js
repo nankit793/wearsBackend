@@ -30,7 +30,6 @@ const attachCokiesToRes = async (res, payload) => {
     // signed: true,
     expires: new Date(Date.now() + longerExp),
   });
-  console.log(payload?.username);
   res.cookie("username", payload?.username || "", {
     httpOnly: false,
     // secure: process.env.NODE_ENV === "production",

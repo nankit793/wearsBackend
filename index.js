@@ -61,7 +61,6 @@ app.get(
   passport.authenticate("google", { session: false }),
   async (req, res) => {
     const token = await req.user;
-    console.log(token);
     await attachCokiesToRes(res, token);
     // Redirect the user to the frontend with the JWT token as a query parameter
     res.redirect(`http://localhost:3000`);
