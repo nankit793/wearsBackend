@@ -14,13 +14,21 @@ const app = express();
 const USERS = require("@models/user/UserSchema");
 
 app.use(cookieParser("h3iueiohalkfdqhjdhoi1308yehdif"));
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  res.setHeader("Access-Control-Allow-Origin", origin || "*");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-});
+
+const allowedOrigins = ["http://localhost:3001", "http://localhost:3000"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    console.log(allowedOrigins.includes(origin));
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 require("dotenv").config({
   path: "./dev.env",
