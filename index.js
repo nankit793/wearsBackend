@@ -14,6 +14,13 @@ const app = express();
 const USERS = require("@models/user/UserSchema");
 
 app.use(cookieParser("h3iueiohalkfdqhjdhoi1308yehdif"));
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 require("dotenv").config({
   path: "./dev.env",
@@ -68,15 +75,6 @@ app.get(
 );
 
 app.use(bodyParser.json());
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  res.setHeader("Access-Control-Allow-Origin", origin || "*");
-  // res.setHeader("Access-Control-Allow-Origin", "https://astrosevatalk.com");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-});
 
 app.use(express.json());
 app.use("/user", require("./routes/user/index"));
