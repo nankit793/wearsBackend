@@ -68,9 +68,17 @@ app.get(
 );
 
 app.use(bodyParser.json());
-app.use("*", cors({ credentials: true, origin: "http://localhost:3000" }));
-app.use(express.json());
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  res.setHeader("Access-Control-Allow-Origin", origin || "*");
+  // res.setHeader("Access-Control-Allow-Origin", "https://astrosevatalk.com");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
+app.use(express.json());
 app.use("/user", require("./routes/user/index"));
 app.use("/", require("./routes/index"));
 
