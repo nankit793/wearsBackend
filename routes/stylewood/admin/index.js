@@ -5,5 +5,5 @@ app.use("/addProduct", require("./product/addProduct"));
 app.use("/editProduct", require("./product/editProduct"));
 app.use("/register", require("./singOn/register"));
 app.use("/login", require("./singOn/login"));
-// app.use("/getInfo", require("./getInfo"));
+app.use("/getInfo", require("./getUserDetails"));
 module.exports = app;
