@@ -4,7 +4,7 @@ const app = express();
 const { productVerification } = require("@controllers/verifiers");
 const Joi = require("joi");
 const multer = require("multer");
-const ProductImages = require("@models/stylewood/ProductImages");
+const ProductImages = require("@models/styleWood/ProductImages");
 const { availableColors } = require("@controllers/definedValues");
 const {
   itemsRequired,
