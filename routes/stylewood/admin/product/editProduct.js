@@ -3,7 +3,7 @@ const adminVerification = require("@middlewares/adminVerification");
 const app = express();
 const { productVerification } = require("@controllers/verifiers");
 const multer = require("multer");
-const ProductImages = require("@models/stylewood/ProductImages");
+const ProductImages = require("@models/styleWood/ProductImages");
 const { itemRequired, serverError } = require("@errors/general");
 const Products = require("../../../../models/styleWood/Products");
 
