@@ -7,7 +7,7 @@ const {
   userNotExist,
 } = require("@errors/general");
 const { attachCokiesToRes } = require("@controllers/general");
-const Admin = require("@models/stylewood/admins/Admins");
+const Admin = require("@models/styleWood/admins/Admins");
 const {
   emailVerification,
   passwordVerification,
